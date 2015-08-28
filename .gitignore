@@ -5,5 +5,5 @@
 *.docstates
 _ReSharper.*
 *.csproj.user
-SatellitePackageSample/packages/*
+Satellite-Packages/packages/*
 *.nupkg
