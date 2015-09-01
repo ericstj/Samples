@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>System.Banana.1.1.dll.dotnet</id>
+    <version>1.0.0</version>
+    <authors>NugetSamples</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Sample package</description>
+    <dependencies>
+      <group targetFramework="dotnet">
+        <dependency id="System.IO" version="4.0.10" />
+        <dependency id="System.Reflection" version="4.0.10" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.0" />
+        <dependency id="System.Runtime" version="4.0.20" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\System.Banana\bin\Debug\System.Banana.dll" target="lib/dotnet" />
+  </files>
+</package>

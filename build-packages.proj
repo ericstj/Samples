@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <NuSpec Include="Satellite-Packages\ClassLibrary\*.nuspec" />
+    <NuSpec Include="NuGet3\*\package\*.nuspec" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <Error Condition="'$(NuGet)' == '' or !Exists($(NuGet))" Text="NuGet property must be defined and point to nuget.exe"/>
+    <Error Condition="'$(PackageOutputDir)' == ''" Text="PackageOutputDir property must be defined and point to location to build packages to."/>
+    <Error Condition="'$(NuGetPackages)' == ''" Text="NuGetPackages property must be defined and point to location to restore packages to."/>
+
+    <MakeDir Directories="$(PackageOutputDir)" />
+
+    <Exec Command="&quot;$(NuGet)&quot; pack &quot;%(NuSpec.Identity)&quot; -OutputDirectory &quot;$(PackageOutputDir)&quot;" />
+
+    <!-- delete any stale copies in the packages directory -->
+    <ItemGroup>
+      <OldPackagesDir Include="$(NuGetPackages)\%(NuSpec.FileName)" Condition="Exists('$(NuGetPackages)\%(NuSpec.FileName)')"/>
+      <OldPackagesDir Include="$(NuGetPackages)\%(NuSpec.FileName).1.0.0"  Condition="Exists('$(NuGetPackages)\%(NuSpec.FileName).1.0.0')" />
+    </ItemGroup>
+    <RemoveDir Directories="@(OldPackagesDir)"/>
+  </Target>
+</Project>

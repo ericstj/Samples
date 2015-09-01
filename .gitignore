@@ -5,5 +5,8 @@
 *.docstates
 _ReSharper.*
 *.csproj.user
-Satellite-Packages/packages/*
+**/packages
 *.nupkg
+*.lock.json
+**/AppPackages
+**/.vs

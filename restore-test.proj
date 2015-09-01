@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ToRestore Include="Satellite-Packages\SatellitePackageSample.sln" />
+    <ToRestore Include="Nuget3\*\test\**\packages.config" />
+    <ToRestore Include="Nuget3\*\test\**\project.json" />
+  </ItemGroup>
+
+  <!-- list of nuget package sources passed to dnu -->
+  <ItemGroup>
+    <!-- Need to escape double forward slash (%2F) or MSBuild will normalize to one slash on Unix. -->
+    <NuGetSourceList Include="https:%2F%2Fwww.nuget.org/api/v2/" />
+    <NuGetSourceList Include="$(PackageOutputDir)" />
+  </ItemGroup>
+  
+  <Target Name="Build">
+    <Error Condition="'$(NuGet)' == '' or !Exists($(NuGet))" Text="NuGet property must be defined and point to nuget.exe"/>
+    <Error Condition="'$(NuGetPackages)' == ''" Text="NuGetPackages property must be defined and point to location to restore packages to."/>
+    <Error Condition="'$(PackageOutputDir)' == ''" Text="PackageOutputDir property must be defined and point to location to built packages."/>
+    <Exec Command="&quot;$(NuGet)&quot; restore &quot;%(ToRestore.Identity)&quot; -PackagesDirectory &quot;$(NuGetPackages)&quot; @(NuGetSourceList -> '-source &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
+  </Target>
+</Project>

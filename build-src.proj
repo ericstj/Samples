@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Project Include="Satellite-Packages\ClassLibrary\ClassLibrary.csproj" />
+    <Project Include="Nuget3\*\src\**\*.*proj" />
+  </ItemGroup>
+  
+  <Target Name="Build">
+    <MSBuild Projects="@(Project)"
+             BuildInParallel="true"
+             ContinueOnError="ErrorAndContinue" />
+  </Target>
+</Project>
