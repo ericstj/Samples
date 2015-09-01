@@ -10,3 +10,4 @@ _ReSharper.*
 *.lock.json
 **/AppPackages
 **/.vs
+*.nuget.targets
