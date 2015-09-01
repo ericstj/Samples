@@ -31,6 +31,7 @@
     </ItemGroup>
     
     <Exec Condition="'@(ToRestoreWithNuGet)' != ''" Command="&quot;$(NuGet)&quot; restore &quot;%(ToRestoreWithNuGet.Identity)&quot; -PackagesDirectory &quot;$(NuGetPackages)&quot; @(NuGetSourceList -> '-source &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
-    <Exec Condition="'@(ToRestoreWithDnu)' != ''"  Command="dnu restore &quot;%(ToRestoreWithDnu.Identity)&quot; --packages &quot;$(NuGetPackages)&quot; @(NuGetSourceList -> '-s &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
+    <!-- workaround issue where DNX is not honoring local pacakges folder, we'll restore to the central location -->
+    <Exec Condition="'@(ToRestoreWithDnu)' != ''"  Command="dnu restore &quot;%(ToRestoreWithDnu.Identity)&quot; @(NuGetSourceList -> '-s &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
   </Target>
 </Project>

@@ -17,6 +17,7 @@
     <!-- delete any stale copies in the packages directory -->
     <ItemGroup>
       <OldPackagesDir Include="$(NuGetPackages)\%(NuSpec.FileName)" Condition="Exists('$(NuGetPackages)\%(NuSpec.FileName)')"/>
+      <OldPackagesDir Include="$(DNX_HOME)\Packages\%(NuSpec.FileName)" Condition="Exists('$(DNX_HOME)\Packages\%(NuSpec.FileName)')"/>
       <OldPackagesDir Include="$(NuGetPackages)\%(NuSpec.FileName).1.0.0"  Condition="Exists('$(NuGetPackages)\%(NuSpec.FileName).1.0.0')" />
     </ItemGroup>
     <RemoveDir Directories="@(OldPackagesDir)"/>
