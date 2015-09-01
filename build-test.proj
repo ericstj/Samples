@@ -2,9 +2,7 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Project Include="Satellite-Packages\ConsoleApp\ConsoleApp.csproj" />
-    <!-- exclude xproj for now until we can figure out how to customize the packages directory -->
-    <Project Include="Nuget3\*\Test\**\*.*proj"
-             Exclude="Nuget3\*\Test\**\*.xproj" />
+    <Project Include="Nuget3\*\Test\**\*.*proj" />
   </ItemGroup>
   
   <Target Name="Build">

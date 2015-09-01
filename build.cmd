@@ -16,8 +16,18 @@ if NOT EXIST "%MSBuild%" (
   exit /b 1
 )
 
+if NOT DEFINED DNX_HOME (
+  @powershell -NoProfile -ExecutionPolicy unrestricted -Command "&{$Branch='dev';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.ps1'))}"
+)
+
+REM make sure we have the desired version of DNX installed
+call dnvm install 1.0.0-beta6 -r clr
+
+REM the xproj tooling doesn't honor path so make sure we set this
+call set RuntimeToolingDirectory=%DNX_HOME%\runtimes\dnx-clr-win-x86.1.0.0-beta6
+
 if NOT EXIST "%NuGet%" (
-  powershell -Command "(New-Object System.Net.WebClient).DownloadFile(\"%nugetsource%\", \"%NuGet%\")"
+  @powershell -NoProfile -ExecutionPolicy unrestricted -Command "(New-Object System.Net.WebClient).DownloadFile(\"%nugetsource%\", \"%NuGet%\")"
 )
 
 "%MSBuild%" build.proj

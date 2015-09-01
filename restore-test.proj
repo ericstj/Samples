@@ -17,6 +17,20 @@
     <Error Condition="'$(NuGet)' == '' or !Exists($(NuGet))" Text="NuGet property must be defined and point to nuget.exe"/>
     <Error Condition="'$(NuGetPackages)' == ''" Text="NuGetPackages property must be defined and point to location to restore packages to."/>
     <Error Condition="'$(PackageOutputDir)' == ''" Text="PackageOutputDir property must be defined and point to location to built packages."/>
-    <Exec Command="&quot;$(NuGet)&quot; restore &quot;%(ToRestore.Identity)&quot; -PackagesDirectory &quot;$(NuGetPackages)&quot; @(NuGetSourceList -> '-source &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
+    
+    <ItemGroup>
+      <!-- determine if any of the projects we're restoring are xproj's -->
+      <ToRestoreXProj Include="%(ToRestore.RootDir)%(ToRestore.Directory)\*.xproj">
+        <OriginalItemSpec>%(ToRestore.Identity)</OriginalItemSpec>
+      </ToRestoreXProj>
+
+      <!-- Workaround issue https://github.com/NuGet/Home/issues/1304 
+           by restoring with DNU. -->
+      <ToRestoreWithNuGet Include="@(ToRestore)" Exclude="@(ToRestoreXProj->'%(OriginalItemSpec)')" />
+      <ToRestoreWithDnu Include="@(ToRestoreXProj->'%(OriginalItemSpec)')" />
+    </ItemGroup>
+    
+    <Exec Condition="'@(ToRestoreWithNuGet)' != ''" Command="&quot;$(NuGet)&quot; restore &quot;%(ToRestoreWithNuGet.Identity)&quot; -PackagesDirectory &quot;$(NuGetPackages)&quot; @(NuGetSourceList -> '-source &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
+    <Exec Condition="'@(ToRestoreWithDnu)' != ''"  Command="dnu restore &quot;%(ToRestoreWithDnu.Identity)&quot; --packages &quot;$(NuGetPackages)&quot; @(NuGetSourceList -> '-s &quot;%(Identity)&quot;', ' ')" ContinueOnError="ErrorAndContinue" />
   </Target>
 </Project>
