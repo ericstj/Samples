@@ -20,11 +20,8 @@ if NOT EXIST "%NuGet%" (
   powershell -Command "(New-Object System.Net.WebClient).DownloadFile(\"%nugetsource%\", \"%NuGet%\")"
 )
 
-"%MSBuild%" restore-src.proj
-"%MSBuild%" build-src.proj
-"%MSBuild%" build-packages.proj
-"%MSBuild%" restore-test.proj
-"%MSBuild%" build-test.proj
+"%MSBuild%" build.proj
+
 
 
 ENDLOCAL
