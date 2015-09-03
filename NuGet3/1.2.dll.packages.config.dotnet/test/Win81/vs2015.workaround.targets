@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- VS2015 has a bug in that it cannot build Win81 projects, workaround that until
+       a VS update is released with a fix -->
+
+  <!-- Calculates AppxManifestSchema items. -->
+  <Target Name="_GetAppxManifestSchemaItems"
+          Condition="'@(AppxManifestSchema)' == ''">
+
+    <GetSdkPropertyValue Condition="'$(TargetPlatformIdentifier)' == 'Windows'"
+                         TargetPlatformSdkRootOverride="$(TargetPlatformSdkRootOverride)"
+                         SDKIdentifier="$(SDKIdentifier)"
+                         SDKVersion="$(SDKVersion)"
+                         TargetPlatformIdentifier="$(TargetPlatformIdentifier)"
+                         TargetPlatformMinVersion="$(TargetPlatformMinVersion)"
+                         TargetPlatformVersion="$(TargetPlatformVersion)"
+                         PropertyName="WindowsSDK80Path">
+      <Output TaskParameter="PropertyValue" PropertyName="_TargetPlatformSdkDir" />
+    </GetSdkPropertyValue>
+
+    <GetSdkPropertyValue Condition="'$(_TargetPlatformIsWindowsPhone)' == 'true'"
+                         TargetPlatformSdkRootOverride="$(TargetPlatformSdkRootOverride)"
+                         SDKIdentifier="$(SDKIdentifier)"
+                         SDKVersion="$(SDKVersion)"
+                         TargetPlatformIdentifier="$(TargetPlatformIdentifier)"
+                         TargetPlatformMinVersion="$(TargetPlatformMinVersion)"
+                         TargetPlatformVersion="$(TargetPlatformVersion)"
+                         PropertyName="WindowsPhoneSdkDir">
+      <Output TaskParameter="PropertyValue" PropertyName="_TargetPlatformSdkDir" />
+    </GetSdkPropertyValue>
+
+    <GetSdkPropertyValue Condition="'$(AppxPackagePipelineVersion)' == '$(UapBuildPipeline)'"
+                         TargetPlatformSdkRootOverride="$(TargetPlatformSdkRootOverride)"
+                         SDKIdentifier="$(SDKIdentifier)"
+                         SDKVersion="$(SDKVersion)"
+                         TargetPlatformIdentifier="$(TargetPlatformIdentifier)"
+                         TargetPlatformMinVersion="$(TargetPlatformMinVersion)"
+                         TargetPlatformVersion="$(TargetPlatformVersion)"
+                         PropertyName="WindowsSdkDir">
+      <Output TaskParameter="PropertyValue" PropertyName="_TargetPlatformSdkDir" />
+    </GetSdkPropertyValue>
+
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'Windows' and '$(TargetPlatformVersion)' == '8.0'">
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxManifestSchema.xsd">
+        <NamespaceAlias>m</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2010/manifest</NamespaceUri>
+      </AppxManifestSchema>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'Windows' and '$(TargetPlatformVersion)' != '8.0'">
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxManifestSchema2010_v2.xsd">
+        <NamespaceAlias>m</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2010/manifest</NamespaceUri>
+      </AppxManifestSchema>
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxManifestSchema2013.xsd">
+        <NamespaceAlias>m2</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2013/manifest</NamespaceUri>
+      </AppxManifestSchema>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(AppxPackagePipelineVersion)' == '$(UapBuildPipeline)' and '$(SDKVersion)' == '10.0'">
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\$(TargetPlatformVersion)\WinRT\FoundationManifestSchema.xsd">
+        <NamespaceAlias>m</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/manifest/foundation/windows10</NamespaceUri>
+      </AppxManifestSchema>
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\$(TargetPlatformVersion)\WinRT\UapManifestSchema.xsd">
+        <NamespaceAlias>uap</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/manifest/uap/windows10</NamespaceUri>
+      </AppxManifestSchema>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(_TargetPlatformIsWindowsPhone)' == 'true'">
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxManifestSchema2010_v3.xsd">
+        <NamespaceAlias>m</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2010/manifest</NamespaceUri>
+      </AppxManifestSchema>
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxManifestSchema2013_v2.xsd">
+        <NamespaceAlias>m2</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2013/manifest</NamespaceUri>
+      </AppxManifestSchema>
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxManifestSchema2014.xsd">
+        <NamespaceAlias>m3</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2014/manifest</NamespaceUri>
+      </AppxManifestSchema>
+      <AppxManifestSchema Include="$(_TargetPlatformSdkDir)\Include\WinRT\AppxPhoneManifestSchema2014.xsd">
+        <NamespaceAlias>mp</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2014/phone/manifest</NamespaceUri>
+      </AppxManifestSchema>
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(_TargetPlatformIsWindowsPhone)' == 'true' and Exists('$(_TargetPlatformSdkDir)\Include\WinRT\StoreManifest.xsd')">
+      <_StoreManifestSchemaDir>$(_TargetPlatformSdkDir)\Include\WinRT\</_StoreManifestSchemaDir>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(_TargetPlatformIsWindowsPhone)' == 'true' and !Exists('$(_TargetPlatformSdkDir)\Include\WinRT\StoreManifest.xsd')">
+      <CURRENTVSINSTALLDIR Condition="'$(CURRENTVSINSTALLDIR)' == ''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\SxS\VS7@14.0)</CURRENTVSINSTALLDIR>
+      <CURRENTVSINSTALLDIR Condition="'$(CURRENTVSINSTALLDIR)' == ''">$(registry:HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\SxS\VS7@14.0)</CURRENTVSINSTALLDIR>
+      <CURRENTVSINSTALLDIR Condition="'$(CURRENTVSINSTALLDIR)' == ''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7@14.0)</CURRENTVSINSTALLDIR>
+      <CURRENTVSINSTALLDIR Condition="'$(CURRENTVSINSTALLDIR)' == ''">$(registry:HKEY_CURRENT_USER\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7@14.0)</CURRENTVSINSTALLDIR>
+      <_StoreManifestSchemaDir>$(CURRENTVSINSTALLDIR)Xml\Schemas\</_StoreManifestSchemaDir>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(_TargetPlatformIsWindowsPhone)' == 'true'">
+      <StoreManifestSchema Include="$(_StoreManifestSchemaDir)StoreManifest.xsd">
+        <NamespaceAlias>store</NamespaceAlias>
+        <NamespaceUri>http://schemas.microsoft.com/appx/2010/StoreManifest</NamespaceUri>
+      </StoreManifestSchema>
+    </ItemGroup>
+
+    <!--
+            Define AppxValidateStoreManifest based on whether we ended up with any
+            StoreManifestSchemas or not.  This keeps the logic agnostic about which
+            TargetPlatform/Version supports validating the Store manifest.
+        -->
+    <PropertyGroup>
+      <AppxValidateStoreManifest Condition="'$(AppxValidateStoreManifest)' == '' and '@(StoreManifestSchema)' != ''">true</AppxValidateStoreManifest>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <MetadataNamespaceUri Condition="'$(MetadataNamespaceUri)' == '' and '$(SDKIdentifier)' != ''">http://schemas.microsoft.com/developer/appx/2015/build</MetadataNamespaceUri>
+      <MetadataNamespaceUri Condition="'$(MetadataNamespaceUri)' == ''">http://schemas.microsoft.com/developer/appx/2012/build</MetadataNamespaceUri>
+    </PropertyGroup>
+  </Target>
+</Project>
