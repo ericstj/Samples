@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>System.Banana.1.5.dll.runtimes</id>
+    <version>1.0.0</version>
+    <authors>NugetSamples</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Sample package</description>
+    <dependencies>
+      <group targetFramework="dotnet">
+        <dependency id="System.IO" version="4.0.0" />
+        <dependency id="System.Reflection" version="4.0.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.0" />
+        <dependency id="System.Runtime" version="4.0.0" />
+        <dependency id="System.Runtime.InteropServices" version="4.0.0" />
+      </group>
+      <!-- all depdencies are inbox in netcore45 / win8 -->
+      <group targetFramework="netcore45" />
+      <!-- netcore50 dependencies from nuget packages -->
+      <group targetFramework="netcore50">
+        <dependency id="System.IO" version="4.0.0" />
+        <dependency id="System.Reflection" version="4.0.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.0" />
+        <dependency id="System.Runtime" version="4.0.0" />
+        <dependency id="System.Runtime.InteropServices" version="4.0.0" />
+      </group>
+      <!-- more inbox frameworks -->
+      <group targetFramework="net45" />
+      <group targetFramework="wpa81" />
+      <!-- required for pcl projects that don't use project.json with dotnet -->
+      <group targetFramework="portable-netcore45+net45+wpa8" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="System.Banana.1.5.dll.runtimes.targets" target="build/dotnet" />
+    <file src="System.Banana.1.5.dll.runtimes.targets" target="build/portable-netcore45+net45+wpa8" />
+    <file src="..\src\System.Banana.Ref\bin\Debug\System.Banana.dll" target="ref/dotnet" />
+    <file src="..\src\System.Banana.Ref\bin\Debug\System.Banana.dll" target="ref/portable-netcore45+net45+wpa8" />
+    <file src="..\src\System.Banana\bin\x86\Debug\System.Banana.dll" target="runtimes/win-x86/lib/dotnet" />
+    <file src="..\src\System.Banana\bin\x86\Debug\System.Banana.dll" target="runtimes/win-x86/lib/portable-netcore45+net45+wpa8" />
+    <file src="..\src\System.Banana\bin\x64\Debug\System.Banana.dll" target="runtimes/win-x64/lib/dotnet" />
+    <file src="..\src\System.Banana\bin\x64\Debug\System.Banana.dll" target="runtimes/win-x64/lib/portable-netcore45+net45+wpa8" />
+    <file src="..\src\System.Banana\bin\ARM\Debug\System.Banana.dll" target="runtimes/win8-ARM/lib/dotnet" />
+    <file src="..\src\System.Banana\bin\ARM\Debug\System.Banana.dll" target="runtimes/win8-ARM/lib/portable-netcore45+net45+wpa8" />
+    <file src="..\src\cherry\bin\Win32\Debug\cherry.dll" target="runtimes/win-x86/native" />
+    <file src="..\src\cherry\bin\x64\Debug\cherry.dll" target="runtimes/win-x64/native" />
+    <file src="..\src\cherry\bin\ARM\Debug\cherry.dll" target="runtimes/win8-arm/native" />
+    <file src="..\src\cherry.appx\bin\Win32\Debug\cherry.dll" target="runtimes/win10-x86/native" />
+    <file src="..\src\cherry.appx\bin\x64\Debug\cherry.dll" target="runtimes/win10-x64/native" />
+    <file src="..\src\cherry.appx\bin\ARM\Debug\cherry.dll" target="runtimes/win10-arm/native" />
+  </files>
+</package>

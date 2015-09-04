@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Project Include="System.Banana\System.Banana.csproj">
+      <Properties>Platform=x86</Properties>
+    </Project>
+    <Project Include="System.Banana\System.Banana.csproj">
+      <Properties>Platform=x64</Properties>
+    </Project>
+    <Project Include="System.Banana\System.Banana.csproj">
+      <Properties>Platform=ARM</Properties>
+    </Project>
+    <Project Include="cherry\cherry.vcxproj">
+      <Properties>Platform=Win32</Properties>
+    </Project>
+    <Project Include="cherry\cherry.vcxproj">
+      <Properties>Platform=x64</Properties>
+    </Project>
+    <Project Include="cherry\cherry.vcxproj">
+      <Properties>Platform=ARM</Properties>
+    </Project>
+    <Project Include="cherry.appx\cherry.appx.vcxproj">
+      <Properties>Platform=Win32</Properties>
+    </Project>
+    <Project Include="cherry.appx\cherry.appx.vcxproj">
+      <Properties>Platform=x64</Properties>
+    </Project>
+    <Project Include="cherry.appx\cherry.appx.vcxproj">
+      <Properties>Platform=ARM</Properties>
+    </Project>
+  </ItemGroup>
+  
+  <Target Name="Build">
+    <MSBuild Projects="@(Project)"
+             BuildInParallel="true"
+             ContinueOnError="ErrorAndContinue" />
+  </Target>
+</Project>
