@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="_ValidatePlatformSystemBanana" BeforeTargets="Build">
+    <Error Condition="'$(TargetExt)' == '.exe' AND '$(Platform)' != 'x86' AND '$(Platform)' != 'x64' AND '$(Platform)' != 'ARM'"
+           Text="Unsupported platform value '$(Platform)'. The $(MSBuildThisFileName) package requires the Platform to be set to x86, x64, or ARM for executable applications." />
+  </Target>
+
+  <PropertyGroup>
+    <_minWinRuntimeVersion Condition="'$(Platform)' == 'arm'">8</_minWinRuntimeVersion>
+  </PropertyGroup>
+  
+  <!-- If the project.json file is missing assume a packages.config
+       based project and add the NuGet v3 assets.  -->
+  <ItemGroup Condition="!Exists('project.json') AND !Exists('$(MSBuildProjectName).project.json')">
+    <!-- we'll use the dotnet implementation since we have the same reference and implementation
+         on all platforms -->
+    <Reference Include="$(MSBuildThisFileDirectory)..\..\ref\dotnet\*.dll">
+      <Private>false</Private>
+    </Reference>
+    
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\..\runtimes\win$(_minWinRuntimeVersion)-$(Platform)\lib\dotnet\*.*" />
+    
+    <ReferenceCopyLocalPaths Condition="'$(OutputType)' != 'AppContainerExe'" Include="$(MSBuildThisFileDirectory)..\..\runtimes\win$(_minWinRuntimeVersion)-$(Platform)\native\*.*" />
+    
+    <!-- We're intentionally resuing the win10 runtime ID here since that is the one used by UAP apps, the DLL is built as Win 8.1 compatible -->
+    <ReferenceCopyLocalPaths Condition="'$(OutputType)' == 'AppContainerExe'" Include="$(MSBuildThisFileDirectory)..\..\runtimes\win10-$(Platform)\native\*.*" />
+  </ItemGroup>
+</Project>
